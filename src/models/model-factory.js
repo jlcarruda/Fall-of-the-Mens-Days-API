@@ -1,9 +1,5 @@
 const config = require('../config')
 
-function validateSchemaPresence(detail) {
-  if (!this.schema) throw new Error(`Schema not set on ${detail}`)
-}
-
 class MongoDbModel {
   constructor (ORM = null, conf = config) {
     this.config = conf
@@ -12,6 +8,9 @@ class MongoDbModel {
     this.schema = null
   }
 
+  validateSchemaPresence(detail) {
+    if (!this.schema) throw new Error(`Schema not set on ${detail}`)
+  }
   getSchema () {
     return this.schema
   }
@@ -22,7 +21,8 @@ class MongoDbModel {
   }
 
   setSchemaPreHooks (hookArray) {
-    validateSchemaPresence("preHook")
+    this.validateSchemaPresence("preHook")
+    if(!hookArray) return
 
     hookArray.map(e => {
       this.schema.pre(e.type, e.hook)
@@ -30,7 +30,8 @@ class MongoDbModel {
   }
 
   setSchemaPostHooks (hookArray) {
-    validateSchemaPresence("postHook")
+    this.validateSchemaPresence("postHook")
+    if(!hookArray) return
 
     hookArray.map(e => {
       this.schema.post(e.type, e.hook)
@@ -38,7 +39,8 @@ class MongoDbModel {
   }
 
   setSchemaMethods (methodsArray) {
-    validateSchemaPresence("methods")
+    this.validateSchemaPresence("methods")
+    if(!methodsArray) return
 
     methodsArray.map(e => {
       this.schema.methods[e.name] = e.hook
@@ -46,7 +48,8 @@ class MongoDbModel {
   }
 
   setSchemaStatics (staticsArray) {
-    validateSchemaPresence("statics")
+    this.validateSchemaPresence("statics")
+    if(!staticsArray) return
 
     staticsArray.map(e => {
       this.schema.methods[e.name] = e.hook
@@ -76,6 +79,7 @@ class MongoDbModelFactory {
       model.setSchemaMethods(methods)
       model.setSchemaStatics(statics)
 
+      console.log(`Commiting model ${name} ...`)
       return this.commitModel(name, model)
     } catch (error) {
       console.error(`Error while creating Model: ${name} \n${error}`)

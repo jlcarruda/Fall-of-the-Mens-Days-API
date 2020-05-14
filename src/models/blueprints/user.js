@@ -1,5 +1,3 @@
-
-
 module.exports = ORM => {
   const { ObjectId } = ORM.Schema.Types
 
