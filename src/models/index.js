@@ -2,10 +2,10 @@ const ModelFactory = require('./model-factory')
 
 const modelFactory = new ModelFactory()
 
-const User = require('./user')
-const Character = require('./character')
+const user = require('./blueprints/user')
+const character = require('./blueprints/character')
 
 module.exports = {
-  User: modelFactory.create(User),
-  Character: modelFactory.create(Character)
+  User: modelFactory.create(user),
+  Character: modelFactory.create(character)
 }
