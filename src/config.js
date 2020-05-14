@@ -4,7 +4,8 @@ const config = {
   ORM: mongoose,
   PORT: process.env.PORT,
   DBURL: process.env.DBURL,
-  SECRET_PASSWORD: process.env.PASSWORD_SECRET
+  PASSWORD_SECRET: process.env.PASSWORD_SECRET,
+  SESSION_SECRET: process.env.SESSION_SECRET
 }
 
 module.exports = config

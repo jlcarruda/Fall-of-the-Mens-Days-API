@@ -1,5 +1,5 @@
 const { User } = require('../../models')
-const { encrypt } = require('../../utils')
+const { encrypt, createSessionToken } = require('../../utils')
 
 module.exports = async ({ username, password }) => {
   try {
@@ -8,15 +8,19 @@ module.exports = async ({ username, password }) => {
     if (exists) return { status: 401 }
     const pwd = await encrypt(password)
 
-    // await User.create({
-    //   username,
-    //   password: pwd
-    // })
-
-    console.log(exists, pwd, username, password)
+    const user = await User.create({
+      username,
+      password: pwd
+    })
 
     return {
-      status: 204
+      status: 201,
+      data: {
+        token: createSessionToken({
+          _id: user._id,
+          username: user.username
+        })
+      }
     }
   } catch (error) {
     console.error('Error on User Signup: ', error)
