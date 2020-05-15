@@ -7,7 +7,7 @@ const character = require('./blueprints/character')
 const table = require('./blueprints/table')
 
 module.exports = {
-  User: modelFactory.create(user),
-  Character: modelFactory.create(character),
-  Table: modelFactory.create(table)
+  User: modelFactory.getModel(user),
+  Character: modelFactory.getModel(character),
+  Table: modelFactory.getModel(table)
 }

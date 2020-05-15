@@ -1,4 +1,6 @@
-module.exports = ORM => {
+const { encrypt } = require('../../utils')
+
+module.exports = (ORM, config) => {
   const { ObjectId } = ORM.Schema.Types
 
   return {
@@ -46,6 +48,14 @@ module.exports = ORM => {
                 .execPopulate()
             }
           })
+        }
+      }
+    ],
+    methods: [
+      {
+        name: 'verifyPassword',
+        hook: function (pass) {
+          return encrypt(pass, config) === this.password
         }
       }
     ]

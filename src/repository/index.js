@@ -1,3 +1,3 @@
 const Database = require('./database')
 
-module.exports = new Database()
+module.exports = config => new Database(config)

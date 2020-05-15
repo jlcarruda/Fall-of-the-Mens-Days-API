@@ -1,4 +1,5 @@
 require('dotenv').config()
+const config = require('./src/config')
 const FallOfTheMensDayServer = require('./src/server')
 
-FallOfTheMensDayServer.then(() => console.log('Server is UP!'))
+FallOfTheMensDayServer(config).then(() => console.log('Server is UP!'))

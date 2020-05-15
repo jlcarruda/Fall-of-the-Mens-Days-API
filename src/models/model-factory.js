@@ -1,9 +1,9 @@
 const config = require('../config')
+const mongoose = require('mongoose')
 
 class MongoDbModel {
-  constructor (ORM = null, conf = config) {
+  constructor (conf = config) {
     this.config = conf
-    this.orm = ORM || this.config.ORM
 
     this.schema = null
   }
@@ -16,7 +16,7 @@ class MongoDbModel {
   }
 
   setSchema (schemaObj) {
-    this.schema = new this.orm.Schema(schemaObj)
+    this.schema = new mongoose.Schema(schemaObj)
     return this.getSchema()
   }
 
@@ -58,21 +58,24 @@ class MongoDbModel {
 }
 
 class MongoDbModelFactory {
-  constructor (ORM = null, conf = config) {
+  constructor (conf = config) {
     this.config = conf
-    this.orm = ORM || this.config.ORM
+  }
+
+  getModel (blueprint) {
+    return mongoose.models[blueprint.name] ?? this.createModel(blueprint)
   }
 
   commitModel (name, model) {
     if (!name || !model) throw new Error(`Model ${!name ? "name" : "object" } is not specified`)
 
-    return this.orm.models[name] ?? this.orm.model(name, model.getSchema())
+    return mongoose.models[name] ?? mongoose.model(name, model.getSchema())
   }
 
-  create (modelBlueprint) {
-    const { name, schema, preHooks, postHooks, methods, statics } = modelBlueprint(this.orm)
+  createModel (modelBlueprint) {
+    const { name, schema, preHooks, postHooks, methods, statics } = modelBlueprint(mongoose, this.config)
     try {
-      let model = new MongoDbModel(this.orm, this.config)
+      let model = new MongoDbModel(this.config)
       model.setSchema(schema)
       model.setSchemaPreHooks(preHooks)
       model.setSchemaPostHooks(postHooks)
@@ -82,7 +85,7 @@ class MongoDbModelFactory {
       console.log(`Commiting model ${name} ...`)
       return this.commitModel(name, model)
     } catch (error) {
-      console.error(`Error while creating Model: ${name} \n${error}`)
+      console.error(`Error while creating Model: ${name} \n`, error)
     }
   }
 }

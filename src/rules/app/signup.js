@@ -1,7 +1,6 @@
-const { User } = require('../../models')
 const { encrypt, createSessionToken } = require('../../utils')
 
-module.exports = async ({ username, password }) => {
+module.exports = async ({ username, password }, { User }, config) => {
   try {
     const exists = await User.findOne({ username })
 
@@ -19,7 +18,7 @@ module.exports = async ({ username, password }) => {
         token: createSessionToken({
           _id: user._id,
           username: user.username
-        })
+        }, config)
       }
     }
   } catch (error) {

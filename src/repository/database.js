@@ -1,4 +1,5 @@
 const config = require('../config')
+// const mongoose = require('mongoose')
 
 const connectionStates = {
   0: 'disconnected',
@@ -8,9 +9,9 @@ const connectionStates = {
 }
 
 class Database {
-  constructor (ORM = null, conf = config) {
+  constructor (conf = config) {
     this.config = conf
-    this.orm = ORM ?? this.config.ORM
+    this.orm = this.config.ORM
 
     this.options = {
       useNewUrlParser: true,
