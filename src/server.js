@@ -3,16 +3,19 @@ const bodyParser = require('body-parser')
 const helmet = require('helmet')
 const cors = require('cors')
 
-const config = require('./config')
 const Routes = require('./routes')
 const Repository = require('./repository')
 const ErrorHandlerMiddleware = require('./error-handler')
 
-async function start () {
-  const app = new Express()
-  console.log(config)
+function getConfig () {
+  console.log('No config file passed ... fetching default configurations')
+  return require('./config')
+}
 
-  await Repository.connect()
+async function start (conf = getConfig()) {
+  const app = new Express()
+
+  await Repository(conf).connect()
 
   app.use(helmet())
   app.use(cors())
@@ -23,7 +26,7 @@ async function start () {
 
   app.use(ErrorHandlerMiddleware)
 
-  return new Promise(resolve => app.listen(config.PORT, () => resolve(app)))
+  return new Promise(resolve => app.listen(conf.PORT, () => resolve(app)))
 }
 
-module.exports = start()
+module.exports = conf => start(conf)
