@@ -1,8 +1,6 @@
-const { User } = require('../../models')
-
 const { encrypt, createSessionToken } = require('../../utils')
 
-module.exports = async ({ username, password }) => {
+module.exports = async ({ username, password }, { User }) => {
   try {
     const user = await User.findOne({ username })
 

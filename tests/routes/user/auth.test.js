@@ -1,16 +1,25 @@
 const request = require('supertest')
+const { encrypt } = require('../../../src/utils')
 const server = require('../../../src/server')
 
 describe('POST /user/auth', () => {
-  it('should not authenticate if credentials are not found', async () => {
+  it('should authenticate if credentials are found', async () => {
     const app = await server({
       PORT: 3000,
+      MODELS: {
+        User: {
+          findOne: () => Promise.resolve({
+            username: 'teste',
+            password: encrypt('teste'),
+            _id: '1'
+          })
+        }
+      },
       ORM: {
         connect: () => {}
       }
-    })
 
-    console.log('APP', app)
+    })
 
     const res = await request(app)
       .post('/user/auth')
