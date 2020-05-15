@@ -1,4 +1,4 @@
-const config = require('../config')
 const { createHmac } = require('crypto')
+const config = require('../config')
 
-module.exports = data => createHmac('sha256', config.PASSWORD_SECRET).update(data).digest('hex')
+module.exports = (data, conf = config) => createHmac('sha256', conf.PASSWORD_SECRET).update(data).digest('hex')

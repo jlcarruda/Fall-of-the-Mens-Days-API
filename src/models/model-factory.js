@@ -73,7 +73,7 @@ class MongoDbModelFactory {
   }
 
   createModel (modelBlueprint) {
-    const { name, schema, preHooks, postHooks, methods, statics } = modelBlueprint(mongoose)
+    const { name, schema, preHooks, postHooks, methods, statics } = modelBlueprint(mongoose, this.config)
     try {
       let model = new MongoDbModel(this.config)
       model.setSchema(schema)

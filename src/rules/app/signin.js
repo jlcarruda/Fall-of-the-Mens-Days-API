@@ -1,10 +1,10 @@
-const { encrypt, createSessionToken } = require('../../utils')
+const { createSessionToken } = require('../../utils')
 
-module.exports = async ({ username, password }, { User }) => {
+module.exports = async ({ username, password }, { MODELS, SESSION_SECRET }) => {
+  const { User } = MODELS
   try {
     const user = await User.findOne({ username })
-
-    if (!user || user.password !== encrypt(password)) return { status: 401 }
+    if (!user || user.verifyPassword(password)) return { status: 401 }
 
     return {
       status: 200,
@@ -12,7 +12,7 @@ module.exports = async ({ username, password }, { User }) => {
         token: createSessionToken({
           _id: user._id,
           username: user.username
-        })
+        }, { SESSION_SECRET })
       }
     }
   } catch (error) {

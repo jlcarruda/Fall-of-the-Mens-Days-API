@@ -10,3 +10,10 @@ const config = {
 }
 
 module.exports = config
+
+// if (process.env.NODE_ENV === 'test') {
+//   module.exports.inject = (key, value) => {
+//     config[key] = value
+//     return config
+//   }
+// }

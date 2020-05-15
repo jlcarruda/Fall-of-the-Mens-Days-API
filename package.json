@@ -7,7 +7,7 @@
     "lint": "eslint .",
     "lint-fix": "eslint . --fix",
     "dev": "nodemon app.js",
-    "test": "jest"
+    "test": "jest --testTimeout 10000 --forceExit"
   },
   "author": "",
   "license": "ISC",

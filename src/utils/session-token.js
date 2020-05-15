@@ -1,15 +1,15 @@
 const jwt = require('jsonwebtoken')
 const config = require('../config')
 
-const createSessionToken = data => {
+const createSessionToken = (data, conf = config) => {
   return jwt.sign({
     data
-  }, config.SESSION_SECRET, { expiresIn: '7d' })
+  }, conf.SESSION_SECRET, { expiresIn: '7d' })
 }
 
-const verifySessionToken = token => {
+const verifySessionToken = (token, conf = config) => {
   try {
-    return jwt.verify(token, config.SESSION_SECRET)
+    return jwt.verify(token, conf.SESSION_SECRET)
   } catch (error) {
     return null
   }
